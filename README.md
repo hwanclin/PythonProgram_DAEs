@@ -10,4 +10,4 @@ Specifically, the Python program accomplishes the following:
 3) Compute intertemporal welfare effects for the North and the South when Southern IPRs are tightened to match the Northen standard.
 4) Robustness checks on the coefficient of creative destruction.
 
-5) The Python program includes detailed remarks in order for the code to be reader-friendly.
+The Python program includes detailed remarks in order for the code to be reader-friendly.
