@@ -7,7 +7,7 @@ To run this Python program, one should save the two source files into the same f
 
 Specifically, the Python program accomplishes the following:
 
-1) Solve the North-South dynamical system of DAEs with the Python solver "scipy.integrate.solve_bvp" for a nonlnear stable manifold and the time paths of variables that evolve in transition to steady state;
+1) Solve the North-South dynamical system of DAEs with the Python solver "scipy.integrate.solve_bvp" for a nonlinear stable manifold and the time paths of variables that evolve in transition to steady state;
 2) Compute steady state equlibirums for various scenarios;
 3) Compute intertemporal welfare effects for the North and the South when Southern IPRs are tightened to match the Northen standard.
 4) Robustness checks on the coefficient of creative destruction.
