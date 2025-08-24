@@ -81,7 +81,7 @@ from scipy.integrate import quad
 #
 # where eqs.(22)-(29) are exactly the same as eqs.(1)-(8) presented above.
 #
-# Python Coder: Professor Hwan C. Lin                     Datee: Aril 15, 2025 
+# Python Coder: Professor Hwan C. Lin                     Date: April 15, 2025 
 #===============================================================================
 
 class NSmodel:
