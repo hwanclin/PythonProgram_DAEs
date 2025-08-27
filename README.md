@@ -2,7 +2,7 @@
 The Python program includes two sources files (main.py &amp; NSmodel.py) designed to do all the computations for the paper titled "DAEs-driven Dynamics and North-South Protection of IPRs" (by Hwan C. Lin). This paper now is retitled "A Dynamic Modelling Approach to North-South Disparities in IPR Protection" and published in Oxford Economic Papers:
 
    [ [https://doi.org/10.1093/oep/gpaf024] 
-](url)
+]
 The main tasks of the Python program are to solve a North-South dynamical system of differential algebraic equations (DAEs) and compute intertemporal welfare effects.
 
 The Python program is coded using Anaconda Python 3.12.7.
