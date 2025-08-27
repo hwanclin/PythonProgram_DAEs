@@ -17,13 +17,13 @@ import pandas as pd
 # state, transtional dynamics, intertemporal welfare, among other things.
 # 
 # 2. NCmodel.py -- This source file difnes a class called "NSmodel". The
-# class includes "class memebers" and "class functions" used to:
+# class includes "class members" and "class functions" used to:
 # 
 # a) Import the values of benchmarked  parameters for a North-South model
 #    developed by Professor Hwan C. Lin of UNC-Charlotte;   
 # b) Change some of these parameter values for IPRs-strengthening experiments;
 # c) Define the North-South model's reduced-form steady-state system;
-# d) Compute the steady-state equilibrium values of some endougenous variables;
+# d) Compute the steady-state equilibrium values of some endogenous variables;
 # e) Define the North-South model's dynamical system that evolves over time 
 #    in transition to steady state in the semi-infinite time domain [0,inf); and
 # f) Define a set of two-point boundary conditions for the dynamical system.
@@ -39,24 +39,26 @@ import pandas as pd
 #
 #    dGamma(t)/dt = F1(Y(t), Z(t))                                       (3)
 #       
-#    s.t. the following five state-equilibrium constraints at any moment:
+#    s.t. the following five static-equilibrium constraints at any moment:
 #
 #    Gi(Y(t),Z(t)) = 0, i = {1,2,3,4,5}, t in [0,inf)                    (4) 
 #
 # where Y(t) = [zetax(t), zetay(t), Gamma(t)]
-#       Z(t) = [gx(t), gy(t), thetax(t), thetay(t), tau(t)
+#       Z(t) = [gx(t), gy(t), thetax(t), thetay(t), tau(t)]
 #
 # Note that Given Y(t) at any point in time, the five-dimensional vector Z(t)
-# can be determined by solving the five static equilibrium constraints given
+# can be determined by solving the five static-equilibrium constraints given
 # in (4). As such, the North-South dynamical system is a three-dimensional 
 # system of Differential Algebraic Equations (DAEs), in contrast to Ordinary
 # Differential Equations (ODEs).
 #   
 # The entire dynamical system of DAEs is laid out in equations (22)-(29) of
 # Professor Lin's paper titled "DAEs-driven dynamics and North-South protection
-# of IPRs."
+# of IPRs." This paper now is retitled "A dynamic modelling approach to 
+# North-South disparities in IPR protection" and published in Oxford 
+# Economic Papers [https://doi.org/10.1093/oep/gpaf024].
 #
-# III. Two-point boundary conditions
+# III. The two-point boundary conditions
 #
 # The dynamical system of (1)-(3) subject to the five constraints in (4) 
 # presents a boundary value problem (BVP) in that both zetax(t) and zetay(t)
@@ -64,8 +66,8 @@ import pandas as pd
 # "jump" variable at any moment to respond to any shock coming to perturb the
 # North-South model. Thus, whenever the standard of IPRs is strengthened
 # initially at t=0, for instance, in the South, to solve the constrained
-# dynamical system requires a set of two-point bounary conditions as given 
-# bwlow,
+# dynamical system requires a set of two-point boundary conditions as given 
+# below,
 #   
 #    zetax(t) = zetax0 at t=0
 #    zetay(t) = zetay0 at t=0
@@ -74,7 +76,7 @@ import pandas as pd
 # IV. Python's BVP solver and the iteration mechanism
 #
 # Any BVP solver must involves some iteration mechanisms until the solution
-# converges to a predetermined erroor tolerance. 
+# converges to a predetermined error tolerance. 
 #
 # We use Python's BVP solver -- scipy.optimize.solve_bvp -- to solve the
 # dynamical system of DAEs as a boundary value problem associated with a
@@ -82,7 +84,7 @@ import pandas as pd
 # five constraints of (4) for Z(t) at each node in the time mesh before its
 # inner mechanism can work to solve the dynamical system iteratively.
 #
-# V. Times paths of endogenous variables and intertemporal welfare
+# V. Time paths of endogenous variables and intertemporal welfare
 #
 # Once the dynamical system is solved successfully, we can obtained the time
 # paths of some endogenous variables to compute the change in intertemporal
@@ -93,7 +95,7 @@ import pandas as pd
 #
 # Thr Python program includes an implemention function called
 # "robustness_checks(.....), which is designed to examine how the intertemporal 
-# welfare change resulting from a tightening of Southern IPRs is senstive to
+# welfare change resulting from a tightening of Southern IPRs is sensitive to
 # the model parameter of creative destruction. As such robustness checks
 # involve fifteen scenarios, one should expect a bit more time (like 2 to 3 
 # minutes) required to see results showing up on the console.
@@ -101,7 +103,7 @@ import pandas as pd
 # VII. How to test the Python program?
 #
 #       Step 1: Place the two source files (main.py & NCmodel.py) in the same 
-#               working directory or folder.
+#               working directory or folder of your local computer.
 #
 #       Step 2: Open the driver file of main.py.
 #
@@ -114,7 +116,7 @@ import pandas as pd
 def main():
     """
     Three tasks are done here:
-    1) Compute steady states for four senarios dinstingushed by different
+    1) Compute steady states for four senarios distinguished by different
        imitation rates of good y, which is exclusively for Southern consumers.
     2) Solve the dynamical system of DAEs and plot the time paths of some
        variables of interest.
@@ -129,7 +131,7 @@ def main():
     rho = 0.025                 #Time preference
     mx  = 0.02                  #Imitation rate of good x
     my  = 0.10                  #Imitation rate of good y
-    epsilon = 2.0               #Eelasticity of demand
+    epsilon = 2.0               #Elasticity of demand
     eta = epsilon/(epsilon-1.0) #Markup on unimitated goods
     psi = 1.0                   #Coefficient of creative destruction
     #---------------------------------------------------------------
@@ -172,10 +174,10 @@ def main():
 
     for i in range(4):
 
-        #Parametrize North-South model using each of the 4 y-good imitaion rates
+        #Parametrize the model using each of the 4 y-good imitation rates
         dydt.setmy(my_choice[i])
         
-        #Call function sseEquilibrium(...) to  
+        #Call function ssEquilibrium(...) to obtain steady state  
         SteadyState = ssEquilibrium(dydt, mx, my_choice[i], psi, x0)
 
         if i==0:
@@ -238,7 +240,7 @@ def main():
     # Solve the North-South dynamical system as a constrained BVP:
     #   1) The dynamical system is a set of DAEs in the time domain [0, inf).
     #   2) The DAEs are solved as a 3-dimensional constrained system of ODEs.
-    #   3) The constrianed system of ODEs is subject to 5 constrints.
+    #   3) The constrained system of ODEs is subject to 5 constraints.
     #   4) The constrained system of ODEs is for the 3 endogenous variables:
     #      -> zetax, the unimitated fraction of goods consumed only in North
     #      -> zetay, the unimitated fraction of goods consumed only in South
@@ -257,7 +259,7 @@ def main():
     solall4 = []  #For psi[4] = 1.30
 
     #---------------------------------------------------------------------- 
-    # The two for-loops are designed to simulate 15 senarios due to
+    # The two for-loops below are nested to simulate 15 senarios due to
     # three policy experiments for each of the five parameter values of psi
     # selected from the  psi_choice list of size 5. 
     # ---------------------------------------------------------------------
@@ -298,7 +300,7 @@ def main():
             #          for a spicifc experiment with my raised to match mx,
             #          given a spcific value of psi (creative destruction).
             #
-            #   Old_SS -- Tthe dynamical system's initial steady state.
+            #   Old_SS -- The dynamical system's initial steady state.
             #
             #   New_SS -- The dynamical system's new steady state.
             #--------------------------------------------------------------- 
@@ -351,8 +353,8 @@ def main():
                     New_SS4 = np.vstack((New_SS4, New_SS))
             
     #--------------------------------------------------------
-    # From The above for-loop and if-controls generates, 
-    # we obtain the following three soltuion  holders:
+    # From the above nested for-loops and if-controls, 
+    # we can obtain the following three soltuion  holders:
     # -------------------------------------------------------
     
     solall = [solall0, solall1, solall2, solall3, solall4]
@@ -378,7 +380,7 @@ def main():
     #
     #   solall4 -- holds such information, given psi = psi_choice[4].
     #
-    #  In addition, the above for-loop and if-controls also generate 
+    #  In addition, the above nested for-loop and if-controls can generate 
     #  Initall_SS0, ..., Initial_SS4 and New_SS0, ..., New_SS4,
     #  which hold the same dynamical system's intial and new steady
     #  states for each of Experiments 1, 2, and 3, given each value 
@@ -397,7 +399,7 @@ def main():
     # to plot the dynamical system's "stable manifold" in a 3D space.
     #---------------------------------------------------------------------------
 
-    i = 2   #With this i-index, psi = psi_choice[2] = 1.00, benchmark value
+    i = 2   #With this i-index, psi = psi_choice[2] = 1.00, the benchmark value
     j = 1   #With this j-index, solall[1], Inital_SS2[1], and New_SS2[1] all
             #refer to the benchmark experiment, given psi=1.00.
 
@@ -411,7 +413,7 @@ def main():
 
 
     #--------------------------------------------------------------------------
-    # Compute and disply intertemporal-welfare effects
+    # Compute and display intertemporal-welfare effects
     #--------------------------------------------------------------------------
     
     i = 2
@@ -429,14 +431,14 @@ def main():
 
 
     #--------------------------------------------------------------------
-    # Robustness Checks on psi, coefficient of cretive destruction
+    # Robustness Checks on psi, coefficient of creative destruction
     #--------------------------------------------------------------------
 
     robustness_checks(dydt,solall,Old_SS,New_SS,psi_choice,i,j,my_choice)
     
     #-------------------------------------------------------------------- 
     # Remarks: Robustness checks are aimed to see if the intertemporal
-    #          welfare changes are sensitive to creative destruction 
+    #          welfare changes are sensitive to the creative destruction 
     #          coefficient psi. 
     #--------------------------------------------------------------------
 
@@ -452,7 +454,7 @@ def main():
 # 3) timepaths(-----)
 # 4) plot_timepaths(-----)
 # 5) intertemporal_welfare(-----)
-# 6) displaySS(-----))
+# 6) displaySS(-----)
 # 7) displaySS_welfare(-----)
 # 8) displayOmega_Transition(-----)
 # 9) robustness_checks(-----)  
@@ -473,7 +475,7 @@ def ssEquilibrium(dydt, mx, my, psi, sol_guess):
       gy     - innovation rate of good y
       zetax  - the unimitated fraction of good x                             
       zetay  - the unimitated fraction of good y                             
-      tau    - terms of trade applied to both good x and good y              
+      tau    - North-South terms of trade applied to both good x and good y              
       thetaN - the share of Northern manufacturing labor employed to         
                produce good x                                                
       thetaS - the share of Southern manufacturing labor employed to         
@@ -496,7 +498,7 @@ def ssEquilibrium(dydt, mx, my, psi, sol_guess):
     #-----------------------------------------------------------------------
 
     GammaSS = SteadyState[0]+SteadyState[1]  #SteadyState[0] = gx
-                                                 #SteadyState[1] = gy
+                                             #SteadyState[1] = gy
 
     HazardRateSS_x = psi*SteadyState[0] + mx
     HazardRateSS_y = psi*SteadyState[1] + my
@@ -524,22 +526,22 @@ def ssEquilibrium(dydt, mx, my, psi, sol_guess):
 def solveDySystem(dydt, mx, my0, my1, psi, sol_guess, tmax, tnodes, tol): 
     """
     Input
-      dydt - the class object, which refers to the dynamical system definced in
-             the class called  "NSmodel" in the file of NSmodel.py.
+      dydt - the class object, which can refer to the dynamical system defined 
+             in the class called  "NSmodel" in the source file of NSmodel.py.
       mx   - imitation rate of good x.
-      my0  - initial imitation rate of good y.
-      my1  - new imitation rate of good y.
+      my0  - initial imitation rate of good y at time t=0.
+      my1  - new imitation rate of good y, set to take effect at time t=0.
       psi  - coefficient of creative destruction.
       sol_guess - an array of size 7, used for solving the steady state system.
-      tmax   - the upper bound the time domain, used as an approximation of inf.
+      tmax   - the upper bound of time domain, used as an approximation of inf.
       tnodes - the number of nodes in the time mesh.
       tol    - error tolerance
     Output
       solution   - a solution bundle obtained by solving the dynamical system. 
       Initial_SS - the initial steady state before my is decreased 
-                   from my0 to my1.
+                   from my0 to my1 at t=0.
       New_SS     - the new steady state after my is decreased 
-                   from my0 to my1.
+                   from my0 to my1 at t=0.
     """
 
     # Parmetrize the dynamical system using psi and my0 together with the other 
@@ -553,7 +555,7 @@ def solveDySystem(dydt, mx, my0, my1, psi, sol_guess, tmax, tnodes, tol):
     dydt.setmy(my1)
     New_SS = ssEquilibrium(dydt, mx, my1, psi, sol_guess)
 
-    # Retrieve 3 indivual variables' steady-state equlibrium values,  
+    # Retrieve 3 individual variables' steady-state equlibrium values,  
     # respectively, from intial and new steady states:
 
     Gamma0, zetax0, zetay0 = Initial_SS[[2,5,6]]
@@ -683,7 +685,7 @@ def plot_stable_manifold(dydt, solall, Old_SS, New_SS, psi_choice, i, j):
      "stable manifold" in a 3D space: the x-axis measures zetax;
                                       the y-axis measures zetay;
                                       the z-axis measures Gamma.
-    Note: 1) zetax and zetay are predetermined state variable at at mmoment,
+    Note: 1) zetax and zetay are predetermined state variable at any mmoment,
           while Gamma (defined as the sum of gx and gy) is a "jump variable."
 
     """
@@ -908,7 +910,7 @@ def displayOmega_Transition (N_Omega, S_Omega, psi_choice, i, j, my_choice):
     OmegaTrans_N, ProdAvailTrans_N, TermsOfTradeTrans_N,
     MktPowerTrans_N, RandDTrans_N = N_Omega_Transition 
     
-    OmegaTrans_S, ProdAvailTrans, TermsOfTradeTrans_S,
+    OmegaTrans_S, ProdAvailTrans_S, TermsOfTradeTrans_S,
     MktPowerTrans_S, RandDTrans_S = S_Omega_Transition
     """
     data = np.array([N_Omega, S_Omega])
