@@ -56,32 +56,35 @@ from scipy.integrate import quad
 # [zeta(t), zetay(t), Gamma(t), subject to constraints (4)-(8).
 #
 # In total, the reduced-form North-South dynamical system is represented by
-# 8 equations with 8 endogenous  variables: zetax, zetay, Gamma, gx, gy, tau,
-# thetaN, and thetaS, The definition of each variables is given below in remarks
+# 8 equations with 8 endogenous variables: zetax, zetay, Gamma, gx, gy, tau,
+# thetaN, and thetaS, The definition of each variable is given below in remarks
 # along with the code.
 
-# In the constrined ODE system, Gamma(t) is a "jump" variable at any point in 
+# In the constrained ODE system, Gamma(t) is a "jump" variable at any point in 
 # time, but both zetax(t) and zetay(t) are pre-determined state variables. These
 # state variables cannot make a discrete change at any moment. They can only 
 # evolve continuousy over time, in contrast to Gamma(t).
 #
 # Therefore, as a policy shock occurs at t=0, the constrained ODE system
-# presents a boundary-value problem, subject to the two-point boundary
+# presents a boundary-value problem, subject to the system's two-point boundary
 # conditions. To use the Python solver, sicpy.integrate,solve_bvp, we need the 
 # the following two-point boundary conditions: 
 #
 #   At t=0, zetax(t) = zetax0, an initial steady-state equilibrium value.
 #           zetay(t) = zetay0  an initial steady-state equilibrium value,
 #
-#   At t--> inf,
+#   At t--> inf, Gamma(t) converges to Gamma(inf). 
 #
-# For details about the dynamical system, please refer to the paper:
+# For details about the dynamical system, please refer to the paper,
 #
-#  "DAEs-driven Dynamics and North-South Protection of IPRs" (by Hwan C. Lin)
+# "A dynamic modelling approach to North-South disparities in IPR protection"
+# (by Hwan C. Lin), published in Oxford Economic Papers: 
+#    
+#                https://doi.org/10.1093/oep/gpaf024
 #
 # where eqs.(22)-(29) are exactly the same as eqs.(1)-(8) presented above.
 #
-# Python Coder: Professor Hwan C. Lin                     Date: April 15, 2025 
+# Python Coder: Professor Hwan C. Lin                     Datee: Aril 15, 2025 
 #===============================================================================
 
 class NSmodel:
@@ -100,7 +103,7 @@ class NSmodel:
         self.eta     = eta          #Markup on unimitated goods
         self.psi     = psi          #Creative destruction coefficient
 
-        self.ssy0 = []       #A variable list, ssy0,in initial steady state     
+        self.ssy0 = []       #A variable list, ssy0, in initial steady state     
         self.ssy1 = []       #A variable list, ssy1, in new steady state
 
         # where ssy0 is to hold [zetax0, zetay0, Gamma0]
@@ -150,7 +153,7 @@ class NSmodel:
         gamma = gx - gy
 
         #====================================================
-        # 7 Long-run steady-state equibirium condtions
+        # 7 Long-run steady-state equilibrium conditions
         #====================================================
         res = np.zeros(7)
         
@@ -181,7 +184,7 @@ class NSmodel:
         return res
 
         #----------------------------------------------------------------------- 
-        # Note: The steady-state equlibrium condtions do not include gx and gy
+        # Note: The steady-state equilibrium conditions do not include gx and gy
         #       explicitly, This is because we the introduce the auxiliary 
         #       variable gamma, which is defined as gx - gy. 
         #       So, with Gamma = gx + gy, we can use Gamma and gamma to
@@ -267,11 +270,11 @@ class NSmodel:
 
     
     #--------------------------------------------------------------------------
-    # Static equilibrium condtions in transition
+    # Static equilibrium conditions in transition
     #--------------------------------------------------------------------------
     def taufunc(self, x, y):
         """
-        This residual function, taufunc(...), is obtained by subtituting 
+        This residual function, taufunc(...), is obtained by substituting 
         eqs.(5)-(6) into eq.(7). 
 
         Input: x - the terms of trade to be solved
@@ -295,7 +298,7 @@ class NSmodel:
 
     def thetaNfunc(self, zetax, tau):
         """
-        This function determines the equlibrium value of thetaN at any moment
+        This function determines the equilibrium value of thetaN at any moment
         according to eq.(5)
         """
         epsilon = self.epsilon
@@ -335,7 +338,7 @@ class NSmodel:
     def Steady_Omega(self, steadystate_0, steadystate_1):
         """
         This function computes the changes in steady-state welfare and its
-        welfare componets according to eqs.(31) and (32a)-(32d) for the North
+        welfare components according to eqs.(31) and (32a)-(32d) for the North
         and eqs.(33) and (34a)-(34d) for the South in the paper. For these
         computations, transition dynamics are disregarded.
 
@@ -412,7 +415,7 @@ class NSmodel:
     def Transition_Omega_N(self, Gamma, gx, zetax, tau, tmax, steadystate_0):
         """
         This function computes the changes in Northern intertemporal welfare 
-        and its welfare componets according to eqs.(31) and (32a)-(32d) in the
+        and its welfare components according to eqs.(31) and (32a)-(32d) in the
         paper. For these computations, transition dynamics are taken into
         account.
 
@@ -420,7 +423,7 @@ class NSmodel:
                gx    = gx(t)
                zetax = zetax(t)
                tau   = tau(t)
-               tamx  = the chosen approxination of inf
+               tamx  = the chosen approximation of inf
                steadystate_0 - the initial steady state, a list of size 8.
         Output: Transition_Omega_N - a list of size 5 for the North.
         """
@@ -476,7 +479,7 @@ class NSmodel:
     def Transition_Omega_S(self, Gamma, gy, zetay, tau, tmax, steadystate_0):
         """
         This function computes the changes in Southern intertemporal welfare 
-        and its welfare componets according to eqs.(33) and (34a)-(34d) in the
+        and its welfare components according to eqs.(33) and (34a)-(34d) in the
         paper. For these computations, transition dynamics are taken into
         account.
 
@@ -484,7 +487,7 @@ class NSmodel:
                gx    = gx(t)
                zetax = zetax(t)
                tau   = tau(t)
-               tamx  = the chosen approxination of inf
+               tamx  = the chosen approximation of inf
                steadystate_0 - the initial steady state, a list of size 8.
         Output: Transition_Omega_S - a list of size 5 for the South.
         """
