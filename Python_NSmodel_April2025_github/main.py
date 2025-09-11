@@ -14,9 +14,9 @@ import pandas as pd
 #
 # 1. main.py -- This source file includes the driver called "main()" and nine 
 # implementation functions designed to compute a dynamical system's steady
-# state, transtional dynamics, intertemporal welfare, among other things.
+# state, transitional dynamics, intertemporal welfare, among other things.
 # 
-# 2. NCmodel.py -- This source file difnes a class called "NSmodel". The
+# 2. NCmodel.py -- This source file defines a class called "NSmodel". The
 # class includes "class members" and "class functions" used to:
 # 
 # a) Import the values of benchmarked  parameters for a North-South model
@@ -88,12 +88,12 @@ import pandas as pd
 #
 # Once the dynamical system is solved successfully, we can obtained the time
 # paths of some endogenous variables to compute the change in intertemporal
-# welfare for the North and South using the formulas provided in Propostions 4
+# welfare for the North and South using the formulas provided in Propositions 4
 # and 5 of Professor Lin's paper.
 #
 # VI. Robustness Checks
 #
-# Thr Python program includes an implemention function called
+# The Python program includes an implementaion function called
 # "robustness_checks(.....), which is designed to examine how the intertemporal 
 # welfare change resulting from a tightening of Southern IPRs is sensitive to
 # the model parameter of creative destruction. As such robustness checks
@@ -116,7 +116,7 @@ import pandas as pd
 def main():
     """
     Three tasks are done here:
-    1) Compute steady states for four senarios distinguished by different
+    1) Compute steady states for four scenarios distinguished by different
        imitation rates of good y, which is exclusively for Southern consumers.
     2) Solve the dynamical system of DAEs and plot the time paths of some
        variables of interest.
@@ -245,7 +245,7 @@ def main():
     #      -> zetax, the unimitated fraction of goods consumed only in North
     #      -> zetay, the unimitated fraction of goods consumed only in South
     #      -> Gamma, the sum of x-good innovation rate (gx) and
-    #                y-good innocvation rate (gy)
+    #                y-good innovation rate (gy)
     #   5) The constrained system of ODEs is defined in the class, NCmodel.
     #   6) Python's BVP solver (scipy.integrate.solve_bvp) is used in the
     #      used-defined function, solveDySystem(...), provided below.
@@ -259,7 +259,7 @@ def main():
     solall4 = []  #For psi[4] = 1.30
 
     #---------------------------------------------------------------------- 
-    # The two for-loops below are nested to simulate 15 senarios due to
+    # The two for-loops below are nested to simulate 15 scenarios due to
     # three policy experiments for each of the five parameter values of psi
     # selected from the  psi_choice list of size 5. 
     # ---------------------------------------------------------------------
@@ -297,8 +297,8 @@ def main():
             # Calling solveDySystem(...) can obtain three outputs:
             #
             #   sol -- the solution for the dynamical system, dydt, 
-            #          for a spicifc experiment with my raised to match mx,
-            #          given a spcific value of psi (creative destruction).
+            #          for a specific experiment with my raised to match mx,
+            #          given a specific value of psi (creative destruction).
             #
             #   Old_SS -- The dynamical system's initial steady state.
             #
@@ -354,7 +354,7 @@ def main():
             
     #--------------------------------------------------------
     # From the above nested for-loops and if-controls, 
-    # we can obtain the following three soltuion  holders:
+    # we can obtain the following three soluion holders:
     # -------------------------------------------------------
     
     solall = [solall0, solall1, solall2, solall3, solall4]
@@ -381,7 +381,7 @@ def main():
     #   solall4 -- holds such information, given psi = psi_choice[4].
     #
     #  In addition, the above nested for-loop and if-controls can generate 
-    #  Initall_SS0, ..., Initial_SS4 and New_SS0, ..., New_SS4,
+    #  Initial_SS0, ..., Initial_SS4 and New_SS0, ..., New_SS4,
     #  which hold the same dynamical system's intial and new steady
     #  states for each of Experiments 1, 2, and 3, given each value 
     #  of psi in the psi_choice list of size 5..
@@ -392,7 +392,7 @@ def main():
     #---------------------------------------------------------------------------
     # Plot the time paths in transition to steady state for the benchmark
     # experiment, for which the initial y-good imitation rate is set equal to
-    # my0=0.10 and raised to my1 in oreder to match the x-good imitation rate,
+    # my0=0.10 and raised to my1 in order to match the x-good imitation rate,
     # denoted by mx=0.02. 
     # 
     # In addition, we can use the time paths of zetax(t), zetay(t), and Gamma(t)
@@ -403,7 +403,7 @@ def main():
     j = 1   #With this j-index, solall[1], Inital_SS2[1], and New_SS2[1] all
             #refer to the benchmark experiment, given psi=1.00.
 
-    # Time paths in tansition
+    # Time paths in transition
     plot_timepaths(dydt, solall, Old_SS, New_SS, psi_choice, i, j)
 
     # Stable Manifold in transition
@@ -509,7 +509,7 @@ def ssEquilibrium(dydt, mx, my, psi, sol_guess):
     wNwS = SteadyState[4]/eta #North wage relative to Southern wage
                               #SteadyState[4] = tau or N-S terms of trade
     
-    # Insert or append other endorgenous variables to expand the size of 
+    # Insert or append other endogenous variables to expand the size of 
     # SteadyState from 7 to 13: 
 
     SteadyState = np.insert(SteadyState, 0, GammaSS)
@@ -544,7 +544,7 @@ def solveDySystem(dydt, mx, my0, my1, psi, sol_guess, tmax, tnodes, tol):
                    from my0 to my1 at t=0.
     """
 
-    # Parmetrize the dynamical system using psi and my0 together with the other 
+    # Parametrize the dynamical system using psi and my0 together with the other 
     # model parameters that has been exported to the class NCmodel.
     
     dydt.setpsi(psi)
@@ -555,8 +555,8 @@ def solveDySystem(dydt, mx, my0, my1, psi, sol_guess, tmax, tnodes, tol):
     dydt.setmy(my1)
     New_SS = ssEquilibrium(dydt, mx, my1, psi, sol_guess)
 
-    # Retrieve 3 individual variables' steady-state equlibrium values,  
-    # respectively, from intial and new steady states:
+    # Retrieve 3 individual variables' steady-state equilibrium values,  
+    # respectively, from initial and new steady states:
 
     Gamma0, zetax0, zetay0 = Initial_SS[[2,5,6]]
     Gamma1, zetax1, zetay1 = New_SS[[2,5,6]]
@@ -573,14 +573,14 @@ def solveDySystem(dydt, mx, my0, my1, psi, sol_guess, tmax, tnodes, tol):
     # Time mesh
     tmesh = np.linspace(0, tmax, tnodes)
 
-    # Intial guess for the time paths of the system of DAEs
+    # Initial guess for the time paths of the system of DAEs
     zetax_guess = np.ones(tnodes)*(zetax0+zetax1)*0.5
     zetay_guess = np.ones(tnodes)*(zetay0+zetay1)*0.5
     Gamma_guess = np.ones(tnodes)*(Gamma0+Gamma1)*0.5
 
     y_guess = np.vstack((zetax_guess, zetay_guess, Gamma_guess))
 
-    #Call scipy.integrate.solve_bvp to dynamical system, denoted by dydt
+    #Call scipy.integrate.solve_bvp to solve dynamical system, denoted by dydt
     solution = solve_bvp( dydt,
                           bc,
                           tmesh,
@@ -591,7 +591,7 @@ def solveDySystem(dydt, mx, my0, my1, psi, sol_guess, tmax, tnodes, tol):
 
     #--------------------------------------------------------------------------
     # Remarks:
-    # 1) To see the inforomation about the BVP-solving process,
+    # 1) To see the information about the BVP-solving process,
     #    one can set "verbose=1" or "verbose=2" in the above.
     #      
     # 2) One can also unmark the marked code below to see more information:
@@ -632,7 +632,7 @@ def timepaths(dydt, solall, psi_choice, i, j):
     solution = solall[i]                                                        
                                                                                 
     sol = solution[j].sol       #j=1 refers to Experiment2 : my0=0.10 --> 0.02.
-                                #Experiment 2 is the benchamrk experiment. 
+                                #Experiment 2 is the benchmark experiment. 
 
     #---------------------------------------------------                        
     #The dynamical system evolves over time in terms of:                        
@@ -836,7 +836,7 @@ def intertemporal_welfare(dydt,solall,Old_SS,New_SS,psi_choice,i,j,my_choice):
     # j=1 refers to my0=0.10 being raised to my1=0.02, matching mx=0.01.
 
     # Retrive solution obtained by solving the dynamical system using Python's
-    # BVP solver, scipy.integrate.solve_bvp. This soltion is retrieved below:
+    # BVP solver, scipy.integrate.solve_bvp. This solution is retrieved below:
     
     solution = solall[i]
     sol = solution[j].sol        
@@ -938,7 +938,7 @@ def displayOmega_Transition (N_Omega, S_Omega, psi_choice, i, j, my_choice):
 def robustness_checks(dydt,solall,Old_SS,New_SS,psi_choice,i,j,my_choice):
     """
     This function is to plot how each region's intertemporal welfare
-    change measured by Omega in transion to steady state is senstive to
+    change measured by Omega in transition to steady state is sensitive to
     the coefficient of creative destruction, psi, in each of the three
     experiments:
 
@@ -946,9 +946,9 @@ def robustness_checks(dydt,solall,Old_SS,New_SS,psi_choice,i,j,my_choice):
     Experiment 2: my=0.10 --> 0.02
     Experiment 3: my=0.2i0 --> 0.02
 
-    In the main(), the three experiments use the benchamark value of psi=1.00.
+    In the main(), the three experiments use the benchmark value of psi=1.00.
 
-    By chenging the value of psi in the main(),  one can obtain the
+    By changing the value of psi in the main(),  one can obtain the
     intertempoal welfare change for the North and South, respectively.
     """
     Omega_N1 = []; Omega_N2=[]; Omega_N3=[]

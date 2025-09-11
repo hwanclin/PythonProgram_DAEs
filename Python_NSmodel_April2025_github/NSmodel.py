@@ -63,11 +63,11 @@ from scipy.integrate import quad
 # In the constrained ODE system, Gamma(t) is a "jump" variable at any point in 
 # time, but both zetax(t) and zetay(t) are pre-determined state variables. These
 # state variables cannot make a discrete change at any moment. They can only 
-# evolve continuousy over time, in contrast to Gamma(t).
+# evolve continuously over time, in contrast to Gamma(t).
 #
 # Therefore, as a policy shock occurs at t=0, the constrained ODE system
 # presents a boundary-value problem, subject to the system's two-point boundary
-# conditions. To use the Python solver, sicpy.integrate,solve_bvp, we need the 
+# conditions. To use the Python solver, scipy.integrate,solve_bvp, we need the 
 # the following two-point boundary conditions: 
 #
 #   At t=0, zetax(t) = zetax0, an initial steady-state equilibrium value.
@@ -84,7 +84,7 @@ from scipy.integrate import quad
 #
 # where eqs.(22)-(29) are exactly the same as eqs.(1)-(8) presented above.
 #
-# Python Coder: Professor Hwan C. Lin                     Datee: Aril 15, 2025 
+# Python Coder: Professor Hwan C. Lin                     Date: April 15, 2025 
 #===============================================================================
 
 class NSmodel:
@@ -95,7 +95,7 @@ class NSmodel:
         """
         self.LN      = LN           #Labor force in North
         self.LS      = LS           #Labor force in South
-        self.a       = a            #Research productivty parameter
+        self.a       = a            #Research productivity parameter
         self.epsilon = epsilon      #Elasticity of demand for a product
         self.rho     = rho          #Time preference coefficient
         self.mx      = mx           #Imitation rate of good x
@@ -196,7 +196,7 @@ class NSmodel:
     def __call__(self, t, y):
         """
         This function defines a constrained system of Ordinary Differential 
-        Equations (ODEs) based on eqs.(1)-(8) menstioned above. The function
+        Equations (ODEs) based on eqs.(1)-(8) mentioned above. The function
         __call__(...) is a callable function object. Hence, a class object
         initiated elsewhere (say, in the driver file) can represent the 
         constrained system of ODEs.
@@ -373,7 +373,7 @@ class NSmodel:
         # The North's Steady-state welfare change, measured by OmegaSS_N
         OmegaSS_N = ProdAvail_N * RandD_N * TermsOfTrade_N * MktPower_N - 1
 
-        # Steady-state wlefare solution set for the North
+        # Steady-state welfare solution set for the North
         Steady_Omega_N = [ OmegaSS_N,
                            ProdAvail_N,
                            TermsOfTrade_N,
