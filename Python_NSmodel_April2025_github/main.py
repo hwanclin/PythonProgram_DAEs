@@ -54,7 +54,7 @@ import pandas as pd
 #   
 # The entire dynamical system of DAEs is laid out in equations (22)-(29) of
 # Professor Lin's paper titled "DAEs-driven dynamics and North-South protection
-# of IPRs." This paper now is retitled "A dynamic modelling approach to 
+# of IPRs." This paper now is titled "A dynamic modelling approach to 
 # North-South disparities in IPR protection" and published in Oxford 
 # Economic Papers [https://doi.org/10.1093/oep/gpaf024].
 #
